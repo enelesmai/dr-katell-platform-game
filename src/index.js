@@ -1,4 +1,4 @@
-import 'phaser';
+/*import 'phaser';
 import config from './Config/config';
 import GameScene from './Scenes/GameScene';
 import BootScene from './Scenes/BootScene';
@@ -26,3 +26,16 @@ class Game extends Phaser.Game {
 }
 
 window.game = new Game();
+*/
+
+import api from './api'
+
+api.getScore().then((scores) => {
+    console.log(scores);
+});
+
+api.saveScore('myname', 8).then(() => {
+    api.getScore().then((scores) => {
+        console.log(scores);
+    });
+});
