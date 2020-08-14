@@ -6,11 +6,14 @@ import checkedBox from '../assets/ui/blue_boxCheckmark.png';
 import bgMusicGame from '../assets/Just_a_dream.mp3';
 import bgMusic from '../assets/TownTheme.mp3';
 import bgGameOverMusic from '../assets/deathsound.ogg';
+import jumpSound from '../assets/jump.wav';
+import downerSound from '../assets/falling.mp3';
+import riserSound from '../assets/raiser.wav';
 import platform from '../assets/ui/platform.png';
 import player from '../assets/ui/doctercat.png';
-import coin from '../assets/ui/bubble.png';
+import coin from '../assets/ui/coin.png';
 import mountain from '../assets/ui/mountain.png';
-import fire from '../assets/ui/virus.png';
+import fire from '../assets/ui/fire.png';
 import heart from '../assets/ui/heart.png';
 
 export default class PreloaderScene extends Phaser.Scene {
@@ -96,6 +99,9 @@ export default class PreloaderScene extends Phaser.Scene {
         this.load.audio('bgMusic', [bgMusic]);
         this.load.audio('bgMusicGame', [bgMusicGame]);
         this.load.audio('bgGameOverMusic', [bgGameOverMusic]);
+        this.load.audio('jumpSound', [jumpSound]);
+        this.load.audio('downerSound', [downerSound]);
+        this.load.audio('riserSound', [riserSound]);
         this.load.image('heart1', heart);
         this.load.image('heart2', heart);
         this.load.image('heart3', heart);

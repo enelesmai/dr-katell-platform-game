@@ -45,8 +45,8 @@ export default class InstructionsScene extends Phaser.Scene {
             this.model.fontStyleLabel
         );
 
-        this.nameLabel = this.add.text(300, 270, 'Enter your name:', this.model.fontStyleTitle);
-        this.nameText = this.add.text(300, 300, ' ... ', this.model.fontStyleTitle);
+        this.nameLabel = this.add.text(300, 300, 'Enter your name:', this.model.fontStyleTitle);
+        this.nameText = this.add.text(300, 330, ' ... ', this.model.fontStyleTitle);
 
         this.input.keyboard.on('keydown', (e) => {
             if (validateKeys(e)) {

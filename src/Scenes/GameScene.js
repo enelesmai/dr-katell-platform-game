@@ -89,6 +89,10 @@ export default class GameScene extends Phaser.Scene {
     jump() {
         if ((!this.dying) && (this.player.body.touching.down || (this.playerJumps > 0 && this.playerJumps < gameOptions.jumps))) {
             if (this.player.body.touching.down) {
+                if (this.lives !== 0) {
+                    this.jumpSound = this.sound.add('jumpSound', { volume: 0.8, loop: false });
+                    this.jumpSound.play();
+                }
                 this.playerJumps = 0;
                 this.scoreUp();
             }
@@ -159,6 +163,8 @@ export default class GameScene extends Phaser.Scene {
 
     lifeOver() {
         this.lives--;
+        this.downerSound = this.sound.add('downerSound', { volume: 0.5, loop: false });
+        this.downerSound.play();
         switch (this.lives) {
             case (2):
                 this.heart3.visible = false;
@@ -268,6 +274,8 @@ export default class GameScene extends Phaser.Scene {
 
         // setting collisions between the player and the coin group
         this.physics.add.overlap(this.player, this.coinGroup, function(player, coin) {
+            this.riserSound = this.sound.add('riserSound', { volume: 0.5, loop: false });
+            this.riserSound.play();
             this.tweens.add({
                 targets: coin,
                 y: coin.y - 100,
@@ -306,7 +314,6 @@ export default class GameScene extends Phaser.Scene {
     update() {
         //jumping listener
         if (Phaser.Input.Keyboard.JustDown(this.keys.keyEnter)) {
-            //if (this.cursorKeys.up.isDown) {
             this.jump();
         }
 
@@ -324,6 +331,8 @@ export default class GameScene extends Phaser.Scene {
                     game.scene.start("GameOver");
                     game.sys.game.globals.bgMusic.play();
                     game.model.bgMusicPlaying = true;
+                    game.lives = 3;
+                    game.score = 0;
                 }), [], this);
             } else {
                 this.scene.start("Game");
