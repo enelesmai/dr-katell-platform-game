@@ -1,12 +1,19 @@
 import 'phaser';
 import gameOptions from '../Config/gameOptions';
 import config from '../Config/config';
+import api from '../api';
 
 export default class GameScene extends Phaser.Scene {
     constructor() {
         super('Game');
+        this.lives = 3;
+        this.score = 0;
         this.gameOver = false;
         this.keys = {};
+        this.heart1 = {};
+        this.heart2 = {};
+        this.heart3 = {};
+        this.model = {};
     }
 
     // the core of the script: platform are added from the pool or created on the fly
@@ -83,6 +90,7 @@ export default class GameScene extends Phaser.Scene {
         if ((!this.dying) && (this.player.body.touching.down || (this.playerJumps > 0 && this.playerJumps < gameOptions.jumps))) {
             if (this.player.body.touching.down) {
                 this.playerJumps = 0;
+                this.scoreUp();
             }
             this.player.setVelocityY(gameOptions.jumpForce * -1);
             this.playerJumps++;
@@ -117,10 +125,65 @@ export default class GameScene extends Phaser.Scene {
         return rightmostMountain;
     }
 
-    create() {
+    addScoreDisplay() {
+        switch (this.lives) {
+            case (1):
+                this.heart1 = this.add.image(40, 40, "heart1");
+                break;
+            case 2:
+                this.heart1 = this.add.image(40, 40, "heart1");
+                this.heart2 = this.add.image(80, 40, "heart2");
+                break;
+            case 3:
+                this.heart1 = this.add.image(40, 40, "heart1");
+                this.heart2 = this.add.image(80, 40, "heart2");
+                this.heart3 = this.add.image(120, 40, "heart3");
+                break;
+            default:
+                break;
+        }
+        this.scoreText = this.add.text(config.width - 200, 40, 'Score: ' + this.score, {
+            fontSize: 20,
+            fill: '#fff'
+        });
+    }
 
+    scoreUp() {
+        this.score += 25;
+        this.updateScore();
+    }
+
+    updateScore() {
+        this.scoreText.setText('Score: ' + this.score);
+    }
+
+    lifeOver() {
+        this.lives--;
+        switch (this.lives) {
+            case (2):
+                this.heart3.visible = false;
+                break;
+            case (1):
+                this.heart2.visible = false;
+            default:
+                this.heart1.visible = false;
+                break;
+        }
+    }
+
+    saveScore(callback) {
+        api.saveScore(this.model.playerName, this.score).then(() => {
+            callback();
+        });
+    }
+
+    preload() {
+        this.addScoreDisplay();
         this.keys.keyEnter = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
-        //this.cursorKeys = this.input.keyboard.createCursorKeys();
+        this.model = this.sys.game.globals.model;
+    }
+
+    create() {
 
         // group with all active mountains.
         this.mountainGroup = this.add.group();
@@ -249,10 +312,22 @@ export default class GameScene extends Phaser.Scene {
 
         // game over
         if (this.player.y > config.height) {
-            this.scene.start("GameOver");
-            this.sys.game.globals.bgMusicGame.stop();
-            this.sys.game.globals.bgMusic.play();
-            this.model.bgMusicPlaying = true;
+            this.lifeOver();
+            if (this.lives === 0) {
+                this.scene.pause();
+                game = this;
+                game.sys.game.globals.bgMusicGame.stop();
+                this.bgGameOverMusic = this.sound.add('bgGameOverMusic', { volume: 0.5, loop: false });
+                this.bgGameOverMusic.play();
+                this.timedEvent = this.time.delayedCall(2000, this.saveScore(function() {
+                    game.model.score = game.score;
+                    game.scene.start("GameOver");
+                    game.sys.game.globals.bgMusic.play();
+                    game.model.bgMusicPlaying = true;
+                }), [], this);
+            } else {
+                this.scene.start("Game");
+            }
         }
         this.player.x = gameOptions.playerStartPosition;
 
@@ -292,7 +367,7 @@ export default class GameScene extends Phaser.Scene {
             if (mountain.x < -mountain.displayWidth) {
                 let rightmostMountain = this.getRightmostMountain();
                 mountain.x = rightmostMountain + Phaser.Math.Between(100, 350);
-                mountain.y = game.config.height + Phaser.Math.Between(0, 100);
+                mountain.y = config.height + Phaser.Math.Between(0, 100);
                 mountain.setFrame(Phaser.Math.Between(0, 3))
                 if (Phaser.Math.Between(0, 1)) {
                     mountain.setDepth(1);
@@ -305,10 +380,10 @@ export default class GameScene extends Phaser.Scene {
             let nextPlatformWidth = Phaser.Math.Between(gameOptions.platformSizeRange[0], gameOptions.platformSizeRange[1]);
             let platformRandomHeight = gameOptions.platformHeighScale * Phaser.Math.Between(gameOptions.platformHeightRange[0], gameOptions.platformHeightRange[1]);
             let nextPlatformGap = rightmostPlatformHeight + platformRandomHeight;
-            let minPlatformHeight = game.config.height * gameOptions.platformVerticalLimit[0];
-            let maxPlatformHeight = game.config.height * gameOptions.platformVerticalLimit[1];
+            let minPlatformHeight = config.height * gameOptions.platformVerticalLimit[0];
+            let maxPlatformHeight = config.height * gameOptions.platformVerticalLimit[1];
             let nextPlatformHeight = Phaser.Math.Clamp(nextPlatformGap, minPlatformHeight, maxPlatformHeight);
-            this.addPlatform(nextPlatformWidth, game.config.width + nextPlatformWidth / 2, nextPlatformHeight);
+            this.addPlatform(nextPlatformWidth, config.width + nextPlatformWidth / 2, nextPlatformHeight);
         }
     }
 };
@@ -333,11 +408,3 @@ window.onload = () => {
     resize();
     window.addEventListener('resize', resize, false);
 };
-
-/*
-api.saveScore('myname', 8).then(() => {
-    api.getScore().then((scores) => {
-        console.log(scores);
-    });
-});
-*/
