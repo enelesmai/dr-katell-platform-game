@@ -67,10 +67,38 @@ export default class GameScene extends Phaser.Scene {
         }
     }
 
+    // adding mountains
+    addMountains() {
+        let rightmostMountain = this.getRightmostMountain();
+        if (rightmostMountain < config.width * 2) {
+            let mountain = this.physics.add.sprite(rightmostMountain + Phaser.Math.Between(100, 350), config.height + Phaser.Math.Between(0, 100), "mountain");
+            mountain.setOrigin(0.5, 1);
+            mountain.body.setVelocityX(gameOptions.mountainSpeed * -1)
+            this.mountainGroup.add(mountain);
+            if (Phaser.Math.Between(0, 1)) {
+                mountain.setDepth(1);
+            }
+            mountain.setFrame(Phaser.Math.Between(0, 3))
+            this.addMountains()
+        }
+    }
+
+    // getting rightmost mountain x position
+    getRightmostMountain() {
+        let rightmostMountain = -200;
+        this.mountainGroup.getChildren().forEach(function(mountain) {
+            rightmostMountain = Math.max(rightmostMountain, mountain.x);
+        })
+        return rightmostMountain;
+    }
+
     create() {
 
         this.cursorKeys = this.input.keyboard.createCursorKeys();
         this.addedPlatforms = 0;
+
+        // group with all active mountains.
+        this.mountainGroup = this.add.group();
 
         // group with all active platforms.
         this.platformGroup = this.add.group({
@@ -104,6 +132,9 @@ export default class GameScene extends Phaser.Scene {
             }
         });
 
+        // adding a mountain
+        this.addMountains()
+
         // number of consecutive jumps made by the player
         this.playerJumps = 0;
 
@@ -113,6 +144,7 @@ export default class GameScene extends Phaser.Scene {
         // adding the player;
         this.player = this.physics.add.sprite(gameOptions.playerStartPosition, config.height * 0.7, "player");
         this.player.setGravityY(gameOptions.playerGravity);
+        this.player.setDepth(2);
 
         // setting collisions between the player and the platform group
         this.physics.add.collider(this.player, this.platformGroup, function() {
@@ -171,6 +203,19 @@ export default class GameScene extends Phaser.Scene {
             if (coin.x < -coin.displayWidth / 2) {
                 this.coinGroup.killAndHide(coin);
                 this.coinGroup.remove(coin);
+            }
+        }, this);
+
+        // recycling mountains
+        this.mountainGroup.getChildren().forEach(function(mountain) {
+            if (mountain.x < -mountain.displayWidth) {
+                let rightmostMountain = this.getRightmostMountain();
+                mountain.x = rightmostMountain + Phaser.Math.Between(100, 350);
+                mountain.y = game.config.height + Phaser.Math.Between(0, 100);
+                mountain.setFrame(Phaser.Math.Between(0, 3))
+                if (Phaser.Math.Between(0, 1)) {
+                    mountain.setDepth(1);
+                }
             }
         }, this);
 

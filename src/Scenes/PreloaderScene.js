@@ -8,6 +8,7 @@ import bgMusic from '../assets/TownTheme.mp3';
 import platform from '../assets/ui/platform.png';
 import player from '../assets/ui/player.png';
 import coin from '../assets/ui/coin.png';
+import mountain from '../assets/ui/mountain.png';
 
 export default class PreloaderScene extends Phaser.Scene {
     constructor() {
@@ -103,6 +104,11 @@ export default class PreloaderScene extends Phaser.Scene {
         this.load.spritesheet("coin", coin, {
             frameWidth: 20,
             frameHeight: 20
+        });
+        // mountains are a sprite sheet made by 512x512 pixels
+        this.load.spritesheet("mountain", mountain, {
+            frameWidth: 512,
+            frameHeight: 512
         });
     }
 
