@@ -6,6 +6,7 @@ export default class GameScene extends Phaser.Scene {
     constructor() {
         super('Game');
         this.gameOver = false;
+        this.keys = {};
     }
 
     // the core of the script: platform are added from the pool or created on the fly
@@ -118,7 +119,8 @@ export default class GameScene extends Phaser.Scene {
 
     create() {
 
-        this.cursorKeys = this.input.keyboard.createCursorKeys();
+        this.keys.keyEnter = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
+        //this.cursorKeys = this.input.keyboard.createCursorKeys();
 
         // group with all active mountains.
         this.mountainGroup = this.add.group();
@@ -227,17 +229,30 @@ export default class GameScene extends Phaser.Scene {
             this.physics.world.removeCollider(this.platformCollider);
 
         }, null, this);
+
+        this.model = this.sys.game.globals.model;
+        if (this.model.musicOn === true && this.model.bgMusicPlaying === true) {
+            this.sys.game.globals.bgMusic.stop();
+            this.model.bgMusicPlaying = false;
+            this.bgMusicGame = this.sound.add('bgMusicGame', { volume: 0.5, loop: true });
+            this.bgMusicGame.play();
+            this.sys.game.globals.bgMusicGame = this.bgMusicGame;
+        }
     }
 
     update() {
         //jumping listener
-        if (this.cursorKeys.up.isDown) {
+        if (Phaser.Input.Keyboard.JustDown(this.keys.keyEnter)) {
+            //if (this.cursorKeys.up.isDown) {
             this.jump();
         }
 
         // game over
         if (this.player.y > config.height) {
             this.scene.start("GameOver");
+            this.sys.game.globals.bgMusicGame.stop();
+            this.sys.game.globals.bgMusic.play();
+            this.model.bgMusicPlaying = true;
         }
         this.player.x = gameOptions.playerStartPosition;
 
