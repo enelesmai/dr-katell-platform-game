@@ -3,6 +3,8 @@ export default class Model {
         this._soundOn = true;
         this._musicOn = true;
         this._bgMusicPlaying = false;
+        this._score = 0;
+        this._playerName = 'Anonymus';
     }
 
     set musicOn(value) {
@@ -27,5 +29,21 @@ export default class Model {
 
     get bgMusicPlaying() {
         return this._bgMusicPlaying;
+    }
+
+    set score(value) {
+        this._score = value;
+    }
+
+    get score() {
+        return this._score;
+    }
+
+    set playerName(value) {
+        this._playerName = value;
+    }
+
+    get playerName() {
+        return this._playerName;
     }
 }
