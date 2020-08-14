@@ -60,8 +60,6 @@ export default class InstructionsScene extends Phaser.Scene {
                 this.scene.start('Game');
             }
         });
-
-        this.playButton = new Button(this, 400, 500, 'blueButton1', 'blueButton2', 'Start!', 'Game');
     }
 
     saveName(name) {

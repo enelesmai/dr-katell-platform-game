@@ -11,9 +11,9 @@ import downerSound from '../assets/falling.mp3';
 import riserSound from '../assets/raiser.wav';
 import platform from '../assets/ui/platform.png';
 import player from '../assets/ui/doctercat.png';
-import coin from '../assets/ui/coin.png';
+import coin from '../assets/ui/bubble01.png';
 import mountain from '../assets/ui/mountain.png';
-import fire from '../assets/ui/fire.png';
+import fire from '../assets/ui/virus01.png';
 import heart from '../assets/ui/heart.png';
 
 export default class PreloaderScene extends Phaser.Scene {
@@ -116,8 +116,8 @@ export default class PreloaderScene extends Phaser.Scene {
         });
         // the coin is a sprite sheet made by 20x20 pixels
         this.load.spritesheet("coin", coin, {
-            frameWidth: 20,
-            frameHeight: 20
+            frameWidth: 40,
+            frameHeight: 40
         });
         // mountains are a sprite sheet made by 512x512 pixels
         this.load.spritesheet("mountain", mountain, {
@@ -126,8 +126,8 @@ export default class PreloaderScene extends Phaser.Scene {
         });
         // the firecamp is a sprite sheet made by 32x58 pixels
         this.load.spritesheet("fire", fire, {
-            frameWidth: 40,
-            frameHeight: 70
+            frameWidth: 55,
+            frameHeight: 55
         });
     }
 

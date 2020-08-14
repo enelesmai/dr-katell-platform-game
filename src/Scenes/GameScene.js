@@ -152,8 +152,8 @@ export default class GameScene extends Phaser.Scene {
         });
     }
 
-    scoreUp() {
-        this.score += 25;
+    scoreUp(value = 25) {
+        this.score += value;
         this.updateScore();
     }
 
@@ -276,6 +276,7 @@ export default class GameScene extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.coinGroup, function(player, coin) {
             this.riserSound = this.sound.add('riserSound', { volume: 0.5, loop: false });
             this.riserSound.play();
+            this.scoreUp(50);
             this.tweens.add({
                 targets: coin,
                 y: coin.y - 100,
