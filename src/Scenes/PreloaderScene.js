@@ -5,6 +5,9 @@ import phaserLogo from '../assets/logo.png';
 import box from '../assets/ui/grey_box.png';
 import checkedBox from '../assets/ui/blue_boxCheckmark.png';
 import bgMusic from '../assets/TownTheme.mp3';
+import platform from '../assets/ui/platform.png';
+import player from '../assets/ui/player.png';
+import coin from '../assets/ui/coin.png';
 
 export default class PreloaderScene extends Phaser.Scene {
     constructor() {
@@ -88,6 +91,44 @@ export default class PreloaderScene extends Phaser.Scene {
         this.load.image('box', box);
         this.load.image('checkedBox', checkedBox);
         this.load.audio('bgMusic', [bgMusic]);
+
+        //preloading game assets
+        this.load.image("platform", platform);
+        // player is a sprite sheet made by 24x48 pixels
+        this.load.spritesheet("player", player, {
+            frameWidth: 24,
+            frameHeight: 48
+        });
+        // the coin is a sprite sheet made by 20x20 pixels
+        this.load.spritesheet("coin", coin, {
+            frameWidth: 20,
+            frameHeight: 20
+        });
+    }
+
+    create() {
+        // setting player animation
+        this.anims.create({
+            key: "run",
+            frames: this.anims.generateFrameNumbers("player", {
+                start: 0,
+                end: 1
+            }),
+            frameRate: 8,
+            repeat: -1
+        });
+
+        // setting coin animation
+        this.anims.create({
+            key: "rotate",
+            frames: this.anims.generateFrameNumbers("coin", {
+                start: 0,
+                end: 5
+            }),
+            frameRate: 15,
+            yoyo: true,
+            repeat: -1
+        });
     }
 
     init() {
