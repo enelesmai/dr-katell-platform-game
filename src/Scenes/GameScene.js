@@ -27,6 +27,7 @@ export default class GameScene extends Phaser.Scene {
             this.physics.add.existing(platform);
             platform.body.setImmovable(true);
             platform.body.setVelocityX(Phaser.Math.Between(gameOptions.platformSpeedRange[0], gameOptions.platformSpeedRange[1]) * -1);
+            platform.setDepth(2);
             this.platformGroup.add(platform);
         }
         this.nextPlatformDistance = Phaser.Math.Between(gameOptions.spawnRange[0], gameOptions.spawnRange[1]);
@@ -47,15 +48,38 @@ export default class GameScene extends Phaser.Scene {
                     coin.setImmovable(true);
                     coin.setVelocityX(platform.body.velocity.x);
                     coin.anims.play("rotate");
+                    coin.setDepth(2);
                     this.coinGroup.add(coin);
                 }
+            }
+        }
+
+        // is there a fire over the platform?
+        if (Phaser.Math.Between(1, 100) <= gameOptions.firePercent) {
+            if (this.firePool.getLength()) {
+                let fire = this.firePool.getFirst();
+                fire.x = posX - platformWidth / 2 + Phaser.Math.Between(1, platformWidth);
+                fire.y = posY - 46;
+                fire.alpha = 1;
+                fire.active = true;
+                fire.visible = true;
+                this.firePool.remove(fire);
+            } else {
+                let fire = this.physics.add.sprite(posX - platformWidth / 2 + Phaser.Math.Between(1, platformWidth), posY - 46, "fire");
+                fire.setImmovable(true);
+                fire.setVelocityX(platform.body.velocity.x);
+                fire.setSize(8, 2, true)
+                fire.anims.play("burn");
+                fire.setDepth(2);
+                this.fireGroup.add(fire);
             }
         }
     }
 
     // the player jumps when on the ground, or once in the air as long as there are jumps left and the first jump was on the ground
+    // and obviously if the player is not dying
     jump() {
-        if (this.player.body.touching.down || (this.playerJumps > 0 && this.playerJumps < gameOptions.jumps)) {
+        if ((!this.dying) && (this.player.body.touching.down || (this.playerJumps > 0 && this.playerJumps < gameOptions.jumps))) {
             if (this.player.body.touching.down) {
                 this.playerJumps = 0;
             }
@@ -95,7 +119,6 @@ export default class GameScene extends Phaser.Scene {
     create() {
 
         this.cursorKeys = this.input.keyboard.createCursorKeys();
-        this.addedPlatforms = 0;
 
         // group with all active mountains.
         this.mountainGroup = this.add.group();
@@ -132,8 +155,29 @@ export default class GameScene extends Phaser.Scene {
             }
         });
 
+        // group with all active firecamps.
+        this.fireGroup = this.add.group({
+
+            // once a firecamp is removed, it's added to the pool
+            removeCallback: function(fire) {
+                fire.scene.firePool.add(fire)
+            }
+        });
+
+        // fire pool
+        this.firePool = this.add.group({
+
+            // once a fire is removed from the pool, it's added to the active fire group
+            removeCallback: function(fire) {
+                fire.scene.fireGroup.add(fire)
+            }
+        });
+
         // adding a mountain
         this.addMountains()
+
+        // keeping track of added platforms
+        this.addedPlatforms = 0;
 
         // number of consecutive jumps made by the player
         this.playerJumps = 0;
@@ -145,6 +189,9 @@ export default class GameScene extends Phaser.Scene {
         this.player = this.physics.add.sprite(gameOptions.playerStartPosition, config.height * 0.7, "player");
         this.player.setGravityY(gameOptions.playerGravity);
         this.player.setDepth(2);
+
+        // the player is not dying
+        this.dying = false;
 
         // setting collisions between the player and the platform group
         this.physics.add.collider(this.player, this.platformGroup, function() {
@@ -168,6 +215,17 @@ export default class GameScene extends Phaser.Scene {
                     this.coinGroup.remove(coin);
                 }
             });
+        }, null, this);
+
+        // setting collisions between the player and the fire group
+        this.physics.add.overlap(this.player, this.fireGroup, function(player, fire) {
+
+            this.dying = true;
+            this.player.anims.stop();
+            this.player.setFrame(2);
+            this.player.body.setVelocityY(-200);
+            this.physics.world.removeCollider(this.platformCollider);
+
         }, null, this);
     }
 
@@ -206,6 +264,14 @@ export default class GameScene extends Phaser.Scene {
             }
         }, this);
 
+        // recycling fire
+        this.fireGroup.getChildren().forEach(function(fire) {
+            if (fire.x < -fire.displayWidth / 2) {
+                this.fireGroup.killAndHide(fire);
+                this.fireGroup.remove(fire);
+            }
+        }, this);
+
         // recycling mountains
         this.mountainGroup.getChildren().forEach(function(mountain) {
             if (mountain.x < -mountain.displayWidth) {
@@ -224,10 +290,10 @@ export default class GameScene extends Phaser.Scene {
             let nextPlatformWidth = Phaser.Math.Between(gameOptions.platformSizeRange[0], gameOptions.platformSizeRange[1]);
             let platformRandomHeight = gameOptions.platformHeighScale * Phaser.Math.Between(gameOptions.platformHeightRange[0], gameOptions.platformHeightRange[1]);
             let nextPlatformGap = rightmostPlatformHeight + platformRandomHeight;
-            let minPlatformHeight = config.height * gameOptions.platformVerticalLimit[0];
-            let maxPlatformHeight = config.height * gameOptions.platformVerticalLimit[1];
+            let minPlatformHeight = game.config.height * gameOptions.platformVerticalLimit[0];
+            let maxPlatformHeight = game.config.height * gameOptions.platformVerticalLimit[1];
             let nextPlatformHeight = Phaser.Math.Clamp(nextPlatformGap, minPlatformHeight, maxPlatformHeight);
-            this.addPlatform(nextPlatformWidth, config.width + nextPlatformWidth / 2, nextPlatformHeight);
+            this.addPlatform(nextPlatformWidth, game.config.width + nextPlatformWidth / 2, nextPlatformHeight);
         }
     }
 };

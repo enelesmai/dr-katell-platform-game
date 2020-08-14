@@ -9,6 +9,7 @@ import platform from '../assets/ui/platform.png';
 import player from '../assets/ui/player.png';
 import coin from '../assets/ui/coin.png';
 import mountain from '../assets/ui/mountain.png';
+import fire from '../assets/ui/fire.png';
 
 export default class PreloaderScene extends Phaser.Scene {
     constructor() {
@@ -110,6 +111,11 @@ export default class PreloaderScene extends Phaser.Scene {
             frameWidth: 512,
             frameHeight: 512
         });
+        // the firecamp is a sprite sheet made by 32x58 pixels
+        this.load.spritesheet("fire", fire, {
+            frameWidth: 40,
+            frameHeight: 70
+        });
     }
 
     create() {
@@ -133,6 +139,17 @@ export default class PreloaderScene extends Phaser.Scene {
             }),
             frameRate: 15,
             yoyo: true,
+            repeat: -1
+        });
+
+        // setting fire animation
+        this.anims.create({
+            key: "burn",
+            frames: this.anims.generateFrameNumbers("fire", {
+                start: 0,
+                end: 4
+            }),
+            frameRate: 15,
             repeat: -1
         });
     }
