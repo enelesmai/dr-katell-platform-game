@@ -1,4 +1,4 @@
-/*import 'phaser';
+import 'phaser';
 import config from './Config/config';
 import GameScene from './Scenes/GameScene';
 import BootScene from './Scenes/BootScene';
@@ -8,6 +8,7 @@ import OptionsScene from './Scenes/OptionsScene';
 import CreditsScene from './Scenes/CreditsScene';
 import Model from './Model';
 import HelpScene from './Scenes/HelpScene';
+import ScoreScene from './Scenes/ScoreScene';
 
 class Game extends Phaser.Game {
     constructor() {
@@ -20,22 +21,18 @@ class Game extends Phaser.Game {
         this.scene.add('Options', OptionsScene);
         this.scene.add('Credits', CreditsScene);
         this.scene.add('Help', HelpScene);
+        this.scene.add('Score', ScoreScene);
         this.scene.add('Game', GameScene);
         this.scene.start('Game');
     }
 }
 
 window.game = new Game();
-*/
 
-import api from './api'
-
-api.getScore().then((scores) => {
-    console.log(scores);
-});
-
+/*
 api.saveScore('myname', 8).then(() => {
     api.getScore().then((scores) => {
         console.log(scores);
     });
 });
+*/
