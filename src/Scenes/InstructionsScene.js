@@ -31,12 +31,17 @@ export default class InstructionsScene extends Phaser.Scene {
         this.playerName = '';
     }
 
+    preload() {
+        this.model = this.sys.game.globals.model;
+        this.model.playerName = "";
+    }
+
     create() {
         this.model = this.sys.game.globals.model;
         this.levelLabel = this.add.text(50, 50, 'INSTRUCTIONS', this.model.fontStyleTitle);
         this.levelLabel = this.add.text(
             30, 120,
-            '* Use the Enter key to avoid getting caught by viruses \n by jumping above them.',
+            '* Use the Enter key to avoid getting caught by viruses.',
             this.model.fontStyleLabel
         );
         this.levelLabel = this.add.text(
@@ -44,9 +49,14 @@ export default class InstructionsScene extends Phaser.Scene {
             '* You\'ll lose one life out of 3 for each virus that catch you.',
             this.model.fontStyleLabel
         );
+        this.levelLabel = this.add.text(
+            30, 280,
+            '* Avoid falling out of the roofs!.',
+            this.model.fontStyleLabel
+        );
 
-        this.nameLabel = this.add.text(300, 300, 'Enter your name:', this.model.fontStyleTitle);
-        this.nameText = this.add.text(300, 330, ' ... ', this.model.fontStyleTitle);
+        this.nameLabel = this.add.text(300, 360, 'Enter your name:', this.model.fontStyleTitle);
+        this.nameText = this.add.text(300, 390, ' ... ', this.model.fontStyleTitle);
 
         this.input.keyboard.on('keydown', (e) => {
             if (validateKeys(e)) {
@@ -63,7 +73,6 @@ export default class InstructionsScene extends Phaser.Scene {
     }
 
     saveName(name) {
-        this.model = this.sys.game.globals.model;
         if (name === '') {
             this.model.playerName = 'Anonymous';
         } else {

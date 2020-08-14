@@ -1,6 +1,6 @@
 import 'phaser';
 import phaserLogo from '../assets/logo.png';
-import splashScreen from '../assets/ideare-logo.png';
+import splashScreen from '../assets/kitkit-logo.png';
 
 export default class BootScene extends Phaser.Scene {
     constructor() {

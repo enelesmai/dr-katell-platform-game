@@ -4,15 +4,15 @@ import blueButton2 from '../assets/ui/blue_button03.png';
 import box from '../assets/ui/grey_box.png';
 import checkedBox from '../assets/ui/blue_boxCheckmark.png';
 import bgMusicGame from '../assets/Just_a_dream.mp3';
-import bgMusic from '../assets/TownTheme.mp3';
+import bgMusic from '../assets/slow_theme.ogg';
 import bgGameOverMusic from '../assets/deathsound.ogg';
 import jumpSound from '../assets/jump.wav';
 import downerSound from '../assets/falling.mp3';
 import riserSound from '../assets/raiser.wav';
-import platform from '../assets/ui/platform.png';
+import platform from '../assets/ui/roof.png';
 import player from '../assets/ui/doctercat.png';
 import coin from '../assets/ui/bubble01.png';
-import mountain from '../assets/ui/mountain.png';
+import mountain from '../assets/ui/bldgs.png';
 import fire from '../assets/ui/virus01.png';
 import heart from '../assets/ui/heart.png';
 
