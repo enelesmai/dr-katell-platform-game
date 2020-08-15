@@ -36,11 +36,28 @@
         "webpack-cli": "^3.3.11",
         "webpack-dev-server": "^3.11.0"
     },
+    "jest": {
+        "moduleFileExtensions": [
+            "js",
+            "jsx"
+        ],
+        "moduleDirectories": [
+            "node_modules",
+            "bower_components",
+            "shared"
+        ],
+        "moduleNameMapper": {
+            "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+            "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js",
+            "\\.(gif|ttf|eot|svg)$": "<rootDir>/__mocks__/fileMock.js"
+        }
+    },
     "dependencies": {
         "axios": "^0.19.2",
         "babel-polyfill": "^6.26.0",
         "phaser": "^3.23.0",
         "phaser3-rex-plugins": "^1.1.18",
+        "regenerator-runtime": "^0.13.7",
         "style-loader": "^1.2.1"
     }
 }

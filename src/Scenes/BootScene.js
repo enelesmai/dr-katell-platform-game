@@ -1,4 +1,4 @@
-import 'phaser';
+import Phaser from 'phaser';
 import phaserLogo from '../assets/logo.png';
 import splashScreen from '../assets/kitkit-logo.png';
 

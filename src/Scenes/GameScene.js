@@ -1,4 +1,4 @@
-import 'phaser';
+import Phaser from 'phaser';
 import gameOptions from '../Config/gameOptions';
 import config from '../Config/config';
 import api from '../Services/api';
