@@ -16,7 +16,7 @@ A simple but creative platform game, implemented using Phaser.
 
 ## Live Demo
 
-[Live Demo Link](https://5f380c8dad43c4bacba78eb5--sharp-booth-e2e0a5.netlify.app/)
+[Live Demo Link](https://f-game--sharp-booth-e2e0a5.netlify.app/)
 
 
 ### How to play
