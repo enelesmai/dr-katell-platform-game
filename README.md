@@ -16,7 +16,7 @@ A simple but creative platform game, implemented using Phaser.
 
 ## Live Demo
 
-[Live Demo Link](http://raw.githack.com/enelesmai/js-the-weather-app/feature-app/dist/index.html)
+[Live Demo Link](https://sad-fermat-b5a048.netlify.app/)
 
 
 ### How to play

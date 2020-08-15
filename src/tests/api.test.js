@@ -1,7 +1,15 @@
 import api from '../Services/api';
 
-describe('Get an array of results', () => {
-  it('It is an array of results', () => {
-    expect(api.getScore()).toContainObject({ name: '.*' });
-  });
+test('expect save score return a promise', () => {
+    api.saveScore('Selene', 10)
+        .then((response) => {
+            expect(response).resolves.toBe('Leaderboard score created correctly.');
+        });
+});
+
+test('expect get all scores from service', () => {
+    api.getScore()
+        .then((response) => {
+            expect(response).resolves.toBe('return a promise');
+        });
 });
