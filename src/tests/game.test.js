@@ -1,4 +1,4 @@
-import GameScene from '../Scenes/GameScene';
+import game from '../Scenes/GameScene';
 
 describe('Game initial values', () => {
   it('Score is zero', () => {
