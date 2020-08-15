@@ -1,7 +1,7 @@
 import 'phaser';
 import gameOptions from '../Config/gameOptions';
 import config from '../Config/config';
-import api from '../api';
+import api from '../Services/api';
 
 export default class GameScene extends Phaser.Scene {
     constructor() {

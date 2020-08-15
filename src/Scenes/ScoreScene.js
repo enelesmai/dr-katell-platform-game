@@ -1,6 +1,6 @@
 import 'phaser';
 import Button from '../Objects/Button';
-import api from '../api';
+import api from '../Services/api';
 
 export default class ScoreScene extends Phaser.Scene {
     constructor() {
