@@ -1,7 +1,6 @@
 node_modules/
 webpack/
 babel.config.js
-src/
 webpack.config.js
 package.json
 package-lock.json
