@@ -1,17 +1,16 @@
 /* eslint-disable func-names */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
+/* eslint-disable import/no-named-as-default */
 import Phaser from 'phaser';
 import gameOptions from '../Config/gameOptions';
 import config from '../Config/config';
 import api from '../Services/api';
+import GameLogic from '../Services/gamelogic';
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
     super('Game');
-    this.lives = 3;
-    this.score = 0;
-    this.gameOver = false;
     this.keys = {};
     this.heart1 = {};
     this.heart2 = {};
@@ -107,7 +106,7 @@ export default class GameScene extends Phaser.Scene {
                 || (this.playerJumps > 0
                     && this.playerJumps < gameOptions.jumps))) {
       if (this.player.body.touching.down) {
-        if (this.lives !== 0) {
+        if (GameLogic.currentLives() !== 0) {
           this.jumpSound = this.sound.add('jumpSound', { volume: 0.8, loop: false });
           this.jumpSound.play();
         }
@@ -148,7 +147,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   addScoreDisplay() {
-    switch (this.lives) {
+    switch (GameLogic.currentLives()) {
       case (1):
         this.heart1 = this.add.image(40, 40, 'heart1');
         break;
@@ -164,26 +163,26 @@ export default class GameScene extends Phaser.Scene {
       default:
         break;
     }
-    this.scoreText = this.add.text(config.width - 200, 40, `Score: ${this.score}`, {
+    this.scoreText = this.add.text(config.width - 200, 40, `Score: ${GameLogic.currentScore}`, {
       fontSize: 20,
       fill: '#fff',
     });
   }
 
-  scoreUp(value = 25) {
-    this.score += value;
+  scoreUp(points) {
+    GameLogic.scoreUp(points);
     this.updateScore();
   }
 
   updateScore() {
-    this.scoreText.setText(`Score: ${this.score}`);
+    this.scoreText.setText(`Score: ${GameLogic.currentScore()}`);
   }
 
   lifeOver() {
-    this.lives -= 1;
+    GameLogic.liveDown();
     this.downerSound = this.sound.add('downerSound', { volume: 0.5, loop: false });
     this.downerSound.play();
-    switch (this.lives) {
+    switch (GameLogic.currentLives()) {
       case (2):
         this.heart3.visible = false;
         break;
@@ -197,7 +196,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   saveScore(callback) {
-    api.saveScore(this.model.playerName, this.score).then(() => {
+    api.saveScore(this.model.playerName, GameLogic.currentScore()).then(() => {
       callback();
     });
   }
@@ -340,7 +339,7 @@ export default class GameScene extends Phaser.Scene {
     // game over
     if (this.player.y > config.height) {
       this.lifeOver();
-      if (this.lives === 0) {
+      if (GameLogic.currentLives() === 0) {
         this.scene.pause();
         game = this;
         game.sys.game.globals.bgMusicGame.stop();
