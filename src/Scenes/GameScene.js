@@ -328,6 +328,9 @@ export default class GameScene extends Phaser.Scene {
             this.bgMusicGame.play();
             this.sys.game.globals.bgMusicGame = this.bgMusicGame;
         }
+
+        //allow click for mobile users
+        this.input.on('pointerdown', this.jump, this);
     }
 
     update() {
