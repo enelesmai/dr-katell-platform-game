@@ -1,0 +1,8 @@
+node_modules/
+webpack/
+babel.config.js
+webpack.config.js
+package.json
+package-lock.json
+.github/
+src/tests/setupTests.js
