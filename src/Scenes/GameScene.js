@@ -416,7 +416,7 @@ export default class GameScene extends Phaser.Scene {
                 );
             const nextPlatformGap = rightmostPlatformHeight + platformRandomHeight;
             const minPlatformHeight = config.height * gameOptions.platformVerticalLimit[0];
-            const maxPlatformHeight = config.height * gameOptions.platformVerticalLimit[1];
+            const maxPlatformHeight = config.height * gameOptions.platformVerticalLimit[1] - 0.1;
             const nextPlatformHeight = Phaser.Math.Clamp(
                 nextPlatformGap, minPlatformHeight, maxPlatformHeight,
             );
