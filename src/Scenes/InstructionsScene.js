@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import Button from '../Objects/Button';
+import ButtonWithCallback from '../Objects/Button';
 
 const validateKeys = (e) => {
   if (
@@ -71,7 +71,7 @@ export default class InstructionsScene extends Phaser.Scene {
       }
     });
 
-    this.menuButton = new Button(this, 400, 500, 'blueButton1', 'blueButton2', 'Start!', 'Game');
+    this.menuButton = new ButtonWithCallback(this, 400, 500, 'blueButton1', 'blueButton2', 'Start!', 'Game', this.invokeSaving);
   }
 
   saveName(name) {
@@ -80,5 +80,9 @@ export default class InstructionsScene extends Phaser.Scene {
     } else {
       this.model.playerName = name;
     }
+  }
+
+  invokeSaving() {
+    this.saveName(this.playerName);
   }
 }
