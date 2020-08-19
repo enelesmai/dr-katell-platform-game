@@ -69,6 +69,7 @@
     "dependencies": {
         "axios": "^0.19.2",
         "babel-jest": "26.3.0",
+        "jest-fetch-mock": "3.0.3",
         "phaser": "^3.23.0",
         "phaser3-rex-plugins": "^1.1.18",
         "regenerator-runtime": "^0.13.7",
