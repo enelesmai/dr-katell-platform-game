@@ -5,4 +5,4 @@ webpack.config.js
 package.json
 package-lock.json
 .github/
-.stickler.yml
+src/tests/setupTests.js
